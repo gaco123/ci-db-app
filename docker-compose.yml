@@ -7,7 +7,8 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy  # Espera a que db esté saludable
 
   db:
     image: mysql:5.7
@@ -16,3 +17,8 @@ services:
       MYSQL_DATABASE: isurdb
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:  # Añade esta sección
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10

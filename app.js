@@ -12,8 +12,15 @@ const connection = mysql.createConnection({
 
 app.get('/', (req, res) => {
     connection.query('SELECT * FROM usuarios', (err, results) => {
-    if (err) return res.send("Error DB");
+        if (err) {
+            console.error('Error en la consulta:', err);
+            return res.status(500).send("Error DB");
+        }
         res.send(results);
     });
-    res.send("Conexion establecida");
+});
+
+// ¡IMPORTANTE! Escuchar en 0.0.0.0 para que Docker pueda exponer el puerto
+app.listen(3000, '0.0.0.0', () => {
+    console.log('Servidor escuchando en el puerto 3000');
 });
