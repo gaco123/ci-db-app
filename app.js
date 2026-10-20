@@ -15,4 +15,5 @@ app.get('/', (req, res) => {
     if (err) return res.send("Error DB");
         res.send(results);
     });
+    res.send("Conexion establecida");
 });
